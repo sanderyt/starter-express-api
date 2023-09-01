@@ -21,17 +21,15 @@ const swaggerDefinition = {
 
 const options = {
   swaggerDefinition,
-  // Paths to files containing OpenAPI definitions
   apis: ["./routes/*.js"],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
 
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 sequelize.sync();
 
-// PORT fallback ✅
 const defaultPort = 3000;
 const port = process.env.PORT || defaultPort;
 
@@ -46,11 +44,6 @@ app.use(bodyParser());
 app.use(passport.initialize());
 passport.use("jwt", jwtStrategy);
 
-app.get("/", async (req, res) => {
-  res.status(200).send("⚡⚡⚡ Welcome to Node.js (Express) API");
-});
-
-// v1 api routes
 app.use("/api/v1", routes);
 
 app.use((req, res, next) => {
