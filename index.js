@@ -1,7 +1,31 @@
-const express = require("express");
-const app = express();
-app.all("/", (req, res) => {
-  console.log("Just got a request!");
-  res.send("This is and api endpoint with deployment on cyclic.sh");
+const { errorHandler, errorConverter } = require("./middlewares/error");
+const { jwtStrategy } = require("./config/passport");
+const ApiError = require("./utils/ApiError");
+const app = require("express")();
+const bodyParser = require("express").json;
+const cors = require("cors");
+const httpStatus = require("http-status");
+const passport = require("passport");
+const routes = require("./routes");
+const sequelize = require("./config/sequelize");
+
+sequelize.sync();
+
+app.use(cors());
+
+app.use(bodyParser());
+
+app.use(passport.initialize());
+passport.use("jwt", jwtStrategy);
+
+// v1 api routes
+app.use("/api/v1", routes);
+
+app.use((req, res, next) => {
+  next(new ApiError(httpStatus.NOT_FOUND, "Not found"));
 });
-app.listen(process.env.PORT || 3000);
+
+app.use(errorHandler);
+app.use(errorConverter);
+
+module.exports = app;
