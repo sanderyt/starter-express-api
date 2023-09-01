@@ -8,6 +8,26 @@ const httpStatus = require("http-status");
 const passport = require("passport");
 const routes = require("./routes");
 const sequelize = require("./config/sequelize");
+const swaggerJSDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+
+const swaggerDefinition = {
+  openapi: "3.0.0",
+  info: {
+    title: "Express API for JSONPlaceholder",
+    version: "1.0.0",
+  },
+};
+
+const options = {
+  swaggerDefinition,
+  // Paths to files containing OpenAPI definitions
+  apis: ["./routes/*.js"],
+};
+
+const swaggerSpec = swaggerJSDoc(options);
+
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 sequelize.sync();
 

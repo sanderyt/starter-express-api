@@ -6,11 +6,26 @@ const validate = require("../middlewares/validate");
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /register:
+ *   post:
+ *     summary: Register a new uer
+ *     description: Create a new profiel for a user
+ */
 router.post(
   "/register",
   validate(authValidation.register),
   authController.register
 );
+
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Login to get access tokens
+ *     description: Create a new profiel for a user
+ */
 router.post("/login", validate(authValidation.login), authController.login);
 router.post("/logout", validate(authValidation.logout), authController.logout);
 router.post(
