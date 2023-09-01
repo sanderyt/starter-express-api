@@ -9,7 +9,7 @@ const sequelize = new Sequelize(
     host: process.env.DATABASE_HOST,
     dialect: "postgres",
     dialectOptions: {
-      ssl: true,
+      ssl: process.env.NODE_ENV === "development" ? false : true,
     },
 
     pool: {

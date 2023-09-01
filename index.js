@@ -11,6 +11,14 @@ const sequelize = require("./config/sequelize");
 
 sequelize.sync();
 
+// PORT fallback ✅
+const defaultPort = 3000;
+const port = process.env.PORT || defaultPort;
+
+app.listen(port, () => {
+  console.log(`⚡⚡⚡ API is running on http://localhost:${port}`);
+});
+
 app.use(cors());
 
 app.use(bodyParser());
